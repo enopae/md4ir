@@ -66,7 +66,8 @@ class _Calc:
         Calculates the spectrum in cm-1 frame
         """
         # Calculate the FFT
-        signal, acf_bh = self.autocorr_numpy()
+        if method == 'numpy': # other methods can be added by elif statements
+            signal, acf_bh = self.autocorr_numpy()
         # Calculate the wavenumbers and treat the data
         wavenumbers = np.fft.fftfreq(len(acf_bh), d=self.timestep)
         wavenumbers = wavenumbers * self.Hz_2invcm * self.scale # convert from Hz to cm-1 and scale

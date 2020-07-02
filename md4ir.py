@@ -1,3 +1,4 @@
+#
 """
 md4ir
 MD analysis for IR spectra calculations
@@ -31,7 +32,7 @@ def main():
     spec_parser.add_argument("--time_end", help="End evaluating the simulation at that time (in ps).", type=int, default=20)
     spec_parser.add_argument("--wn_start", help="Start evaluating the simulation at that wavenumber (in cm-1).", type=int, default=0)
     spec_parser.add_argument("--wn_end", help="End evaluating the simulation at that wavenumber (in cm-1).", type=int, default=4000)
-    spec_parser.add_argument("--method", help="Spectrum calculation method.", choices = ['agmon', 'numpy'], type=str, default = 'numpy')
+    spec_parser.add_argument("--method", help="Spectrum calculation method.", choices = ['numpy'], type=str, default = 'numpy')
 
     # Parser for extractVariables
     extract_parser = subparsers.add_parser('extract', help='Extract variables from an xyz trajectory.', parents=[parent_parser])
