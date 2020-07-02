@@ -1,4 +1,4 @@
-#
+#!/bin/env python3
 """
 md4ir
 MD analysis for IR spectra calculations
