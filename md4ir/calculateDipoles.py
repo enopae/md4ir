@@ -7,11 +7,11 @@ __all__ = [ 'calcDipole' ]
 import numpy as np
 from . import fileHandling
 
-def calcDipole(args):
+def calcDipole(name, file, charges):
     # Set up variables
-    name = args.name
-    datafile = args.file
-    charges = args.charges
+    #name = args.name
+    #datafile = args.file
+    #charges = args.charges
 
     # Run routines
     

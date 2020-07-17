@@ -111,6 +111,7 @@ class _Calc:
         """
         for i in range(self.datalength):
             d = 0
+
             for j in range(3):
                 d += (self.coords[0][i][j] - self.coords[1][i][j])**2
             d = np.sqrt(d)

@@ -6,8 +6,10 @@ Version: 0.1
 Written by: Eno Paenurk
 """
 
-import md4ir # local modules
 import argparse as ap
+# local modules
+from . import calculateDipoles, calculateSpectra, extractVariables
+
 
 def main():
     # Parse arguments
@@ -22,7 +24,7 @@ def main():
 
     # Parser for calculateSpectra
     spec_parser = subparsers.add_parser('spec', help = 'Calculate the spectrum.', formatter_class=ap.ArgumentDefaultsHelpFormatter, parents=[parent_parser])
-    spec_parser.set_defaults(func=md4ir.calcSpec)
+    spec_parser.set_defaults(func=calculateSpectra.calcSpec)
     spec_parser.add_argument("-f", "--file", 
         help="The data file (dipoles, bond lengths, etc). Loop over files: use -f for each file. Average: use -f on a comma-separated list of files.",
         action='append', type=str)
@@ -36,14 +38,14 @@ def main():
 
     # Parser for extractVariables
     extract_parser = subparsers.add_parser('extract', help='Extract variables from an xyz trajectory.', parents=[parent_parser])
-    extract_parser.set_defaults(func=md4ir.extract)
+    extract_parser.set_defaults(func=extractVariables.extract)
     extract_parser.add_argument("-f", "--file", help="Trajectory file.", type=str, default='traj.xyz')
     extract_parser.add_argument("-a", "--atoms", help="String of atoms defining the variable, comma separated (2=bond, 3=angle, 4=dihedral).")
     extract_parser.add_argument("-c", "--centroid", help="String of two atoms for the centroid, comma separated.")
 
     # Parser for calculateDipoles
     dipole_parser = subparsers.add_parser('dipole', help = 'Calculate dipoles from charges and an xyz trajectory.', parents=[parent_parser])
-    dipole_parser.set_defaults(func=md4ir.calcDipole)
+    dipole_parser.set_defaults(func=calculateDipoles.calcDipole)
     dipole_parser.add_argument("-f", "--file", help="Trajectory file.", type=str, default='traj.xyz')
     dipole_parser.add_argument("-c", "--charges", help="File for list of charges.", type=str, default='charges')
 
