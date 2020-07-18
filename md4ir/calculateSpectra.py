@@ -1,5 +1,7 @@
 """
 Calculate vibrational spectra from any 1 or 3-column variable
+This code is part of md4ir, available at:
+https://gitlab.ethz.ch/paenurke/md4ir
 """
 
 __all__ = [ 'calcSpec' ]
@@ -9,25 +11,15 @@ import scipy.signal as sps
 from . import fileHandling
 
 
-def calcSpec(args):
-    """"Calculates the power or IR spectrum."
-    
-    Arguments:
-        args {args} -- Arguments from argparse
+def calcSpec(name, file, scale, timestep, time_start, time_end, wn_start, wn_end, method):
+    """"Calculates the power or IR spectrum (depends on the input type)
     """
     # Set up variables
-    timestep = args.timestep
-    t_start = args.time_start
-    t_end = args.time_end
-    wn_start = args.wn_start
-    wn_end = args.wn_end
-    scale = args.scale
-    method = args.method
-    files = [i.split(',') for i in args.file]
-    if args.name == 'dummy':
+    files = [i.split(',') for i in file]
+    if name == 'dummy':
         name = [str(i[0][:-4]) for i in files] # assuming .xxx extension
     else:
-        name = [args.name] # define as list for easier handling later
+        name = [name] # define as list for easier handling later
 
     # Run routines
     
@@ -38,13 +30,13 @@ def calcSpec(args):
             signal = 0
             for f in files[n]:
                 data = fileHandling.read_cols(f)
-                spec = _Calc(data, scale, timestep, t_start, t_end, wn_start, wn_end)
+                spec = _Calc(data, scale, timestep, time_start, time_end, wn_start, wn_end)
                 spec.gen_spectrum(method, norm = False)
-                signal = signal + spec.signal
+                signal += spec.signal
             spec.signal = signal / np.amax(signal)
         else:
             data = fileHandling.read_cols(files[n][0])
-            spec = _Calc(data, scale, timestep, t_start, t_end, wn_start, wn_end)
+            spec = _Calc(data, scale, timestep, time_start, time_end, wn_start, wn_end)
             spec.gen_spectrum(method)
 
         # Write the spectrum into a file

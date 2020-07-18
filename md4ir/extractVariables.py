@@ -1,5 +1,7 @@
 """
 Extract variables from xyz data
+This code is part of md4ir, available at:
+https://gitlab.ethz.ch/paenurke/md4ir
 """
 
 __all__ = [ 'extract' ]
@@ -7,29 +9,36 @@ __all__ = [ 'extract' ]
 import numpy as np
 from . import fileHandling
 
-def extract(args):
+def extract(name, file, atoms, centroid = None):
+    """Extract variable from xyz coordinates/trajectory
+
+    Args:
+        name (str): basename of the result file
+        file (str): input file of coordinates
+        atoms (list): list of atoms that define the variable
+        centroid (list, optional): list of atoms for calculating centroid. Defaults to None.
+    """
    
     # Set up variables
-    name = args.name
-    datafile = args.file
-    atoms = args.atoms.split(',')
+    infile = file
+    atom_list = atoms.split(',')
 
     # Run routines
-    if args.centroid:
-        centroid = args.centroid.split(',')
-        extractor = _Extract(atoms, datafile)
-        centroid_extractor = _Extract(centroid, datafile)
+    if centroid: # extract distance of an atom to a centroid of atoms
+        centroid = centroid.split(',')
+        extractor = _Extract(atom_list, infile)
+        centroid_extractor = _Extract(centroid, infile)
         centroid_coords = getCentroid(centroid_extractor.coords)
         coords = [extractor.coords[0], centroid_coords]
         calculator = _Calc(coords)
-    else:
-        extractor = _Extract(atoms, datafile)
+    else: # extract variables based on the number of atoms
+        extractor = _Extract(atom_list, infile)
         calculator = _Calc(extractor.coords)
     
     data = calculator.values
 
     # Write the data into a file
-    with open(name+'_'+args.atoms.replace(',', '-')+'.txt','w',encoding='utf8') as f:
+    with open(name+'_'+atoms.replace(',', '-')+'.txt','w',encoding='utf8') as f:
         for i in np.arange(0,len(data)):
                 f.write("%f\n" % (data[i]))
         f.close()
@@ -39,6 +48,8 @@ def extract(args):
 # Functions
 
 def getCentroid(coords):
+    """Calculates the centroid of given xyz coordinates
+    """
     centroid_coords = []
     for i in range(len(coords[0])):
         xyz = np.zeros(3)

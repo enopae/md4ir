@@ -1,5 +1,7 @@
 """
 Generally used file handling functions.
+This code is part of md4ir, available at:
+https://gitlab.ethz.ch/paenurke/md4ir
 """
 
 __all__ = ['read_file','read_cols']

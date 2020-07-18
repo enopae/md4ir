@@ -4,6 +4,7 @@ md4ir
 MD analysis for IR spectra calculations
 Version: 0.1
 Written by: Eno Paenurk
+Available at: https://gitlab.ethz.ch/paenurke/md4ir
 """
 
 import argparse as ap
@@ -51,9 +52,11 @@ def main():
 
     # Collect the arguments
     args = parser.parse_args()
+    # Make a new arguments dict without the function
+    args2 = {i:vars(args)[i] for i in vars(args) if i != 'func'}
 
     # Execute the function
-    args.func(args)
+    args.func(**args2)
 
 if __name__ == "__main__":
     main()

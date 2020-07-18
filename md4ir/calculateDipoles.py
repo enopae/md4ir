@@ -1,5 +1,7 @@
 """
 Calculate dipoles from charges and an xyz trajectory
+This code is part of md4ir, available at:
+https://gitlab.ethz.ch/paenurke/md4ir
 """
 
 __all__ = [ 'calcDipole' ]
@@ -7,17 +9,15 @@ __all__ = [ 'calcDipole' ]
 import numpy as np
 from . import fileHandling
 
-def calcDipole(args):
-    # Set up variables
-    name = args.name
-    datafile = args.file
-    charges = args.charges
+def calcDipole(name, file, charges):
 
-    # Run routines
-    
+    # Set up variables
+    infile = file
+
+    # Run routines    
     # Calculate dipoles
     charge_list = get_charges(charges)
-    atoms = get_atoms(datafile)
+    atoms = get_atoms(infile)
     dipoles = calc_dipole(charge_list, atoms)
 
     # Write the dipoles into a file
@@ -31,6 +31,14 @@ def calcDipole(args):
 # Functions
 
 def get_charges(chargefile):
+    """Extract charges from a 1-column file
+
+    Args:
+        chargefile (str): file with charges
+
+    Returns:
+        list: charge of each atom
+    """
     lines = fileHandling.read_file(chargefile)
     charges = []
     for line in lines:
@@ -38,6 +46,14 @@ def get_charges(chargefile):
     return charges
 
 def get_atoms(xyzfile):
+    """Extract atom coordinates from an xyz trajectory file
+
+    Args:
+        xyzfile (str): xyz file
+
+    Returns:
+        list: xyz coordinates of each atom
+    """
     lines = fileHandling.read_file(xyzfile)
     n_atoms = int(lines[0][0])
     n_lines = n_atoms + 2
@@ -51,6 +67,15 @@ def get_atoms(xyzfile):
     return data
 
 def calc_dipole(charges, xyzs):
+    """Calculates the dipole from coordinates and charges
+
+    Args:
+        charges (list): atomic charges
+        xyzs (list): atomic coordinates
+
+    Returns:
+        list: dipole for each xyz in xyzs
+    """
     dipoles = []
     for xyz in xyzs:
         charge_coord = [0,0,0]
